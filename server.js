@@ -37,9 +37,9 @@ router.get('/sendParametersFromClient', function(req, res, next){
 	var zipcode = req.param('zipcode');
 
 	//function: make http get call to google api 
-	callGoogleApi(name, address1, address2, city, state, zipcode); 
-
+	var dataJSONFromGoogleApiCall = callGoogleApi(name, address1, address2, city, state, zipcode); 
 	//function: parse all the http information from google api 
+
 	//make call to lob api if information exists 
 }); 
 
@@ -55,10 +55,9 @@ function callGoogleApi(name, address1, address2, city, state, zipcode){
 	//GET https://www.googleapis.com/civicinfo/v2/representatives?address=317+hart+senate+office+building+washington+dc&key={YOUR_API_KEY}
 
 	//make google api call 
-	getCallToGoogleApi(baseURI); 
+	var dataJSON = getCallToGoogleApi(baseURI); //json data returned -> can be 200 response or 400 depending on address input 
 
-
-
+	return dataJSON; 
 }
 
 function parseParameters(name, address1, address2, city, state, zipcode){
@@ -134,8 +133,9 @@ function getCallToGoogleApi(baseURI){
 	https.get(baseURI, (res) => {
   		console.log(`Got response: ${res.statusCode}`);
   		// consume response body
-        res.on("data", function(chunk) {
-    		console.log("BODY: " + chunk);
+        res.on("data", function(dataJSON) {
+    		console.log("BODY: " + dataJSON);
+    		return dataJSON; 
   		});
 
   		res.resume();
