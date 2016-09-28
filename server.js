@@ -47,11 +47,17 @@ router.get('/sendParametersFromClient', function(req, res, next){
 function callGoogleApi(name, address1, address2, city, state, zipcode){
 	//parse parameters
 	var parameters = parseParameters(name, address1, address2, city, state, zipcode); 
-	var GETURI = createGoogleApiGETURI(parameters)
-
+	var host = "https://www.googleapis.com/civicinfo/v2/representatives?address="
+	var baseURI = createGoogleApiGETURI(parameters)
 
 	//Format:
 	//GET https://www.googleapis.com/civicinfo/v2/representatives?address=317+hart+senate+office+building+washington+dc&key={YOUR_API_KEY}
+
+	//make google api call 
+	getCallToGoogleApi(host, baseURI); 
+
+
+
 }
 
 function parseParameters(name, address1, address2, city, state, zipcode){
@@ -108,21 +114,24 @@ function parseParameters(name, address1, address2, city, state, zipcode){
 }
 
 function createGoogleApiGETURI(parameters){
-	var baseURI = "https://www.googleapis.com/civicinfo/v2/representatives?address="; 
+	var baseURI; 
 	for(i = 0; i < parameters.length; i++){
 		if(i != parameters.length - 1){
 			//Format:
 			//GET https://www.googleapis.com/civicinfo/v2/representatives?address=317+hart+senate+office+building+washington+dc&key={YOUR_API_KEY}
-			baseURI = baseURI + parameters[i] + "+"
+			baseURI = baseURI = parameters[i] + "+"
 		}else{
 			//last variable in parameter 
 			baseURI = baseURI + parameters[parameters.length-1] + "&key=" + civicInformationAPIKey; 
 		}
 	}
 
-	console.log(baseURI); 
+	return baseURI; 
 }
 
+function getCallToGoogleApi(host, baseURI){
+	
+}
 
 //app.get 
 app.get('/', router);
