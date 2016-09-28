@@ -2,6 +2,7 @@ var civicInformationAPIKey = 'AIzaSyA7RIql1Et5R8mpe8AnPYm7dP_uz0plHrA';
 
 var express = require('express'); 
 	http = require('http'); 
+	https = require('https'); 
 	path = require('path'); 
 	url = require('url');
 	bodyParser = require('body-parser'); 
@@ -49,7 +50,7 @@ function callGoogleApi(name, address1, address2, city, state, zipcode){
 	var parameters = parseParameters(name, address1, address2, city, state, zipcode); 
 	var baseURI = createGoogleApiGETURI(parameters)
 	console.log(baseURI); 
-	
+
 	//Format:
 	//GET https://www.googleapis.com/civicinfo/v2/representatives?address=317+hart+senate+office+building+washington+dc&key={YOUR_API_KEY}
 
@@ -130,7 +131,17 @@ function createGoogleApiGETURI(parameters){
 }
 
 function getCallToGoogleApi(baseURI){
-	
+	https.get(baseURI, (res) => {
+  		console.log(`Got response: ${res.statusCode}`);
+  		// consume response body
+        res.on("data", function(chunk) {
+    		console.log("BODY: " + chunk);
+  		});
+
+  		res.resume();
+	}).on('error', (e) => {
+  		console.log(`Got error: ${e.message}`);
+	});
 }
 
 //app.get 
