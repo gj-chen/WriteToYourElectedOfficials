@@ -38,9 +38,9 @@ router.get('/sendParametersFromClient', function(req, res, next){
 
 	//function: make http get call to google api 
 	var data = callGoogleApi(name, address1, address2, city, state, zipcode); 
-	console.log(data); 
-
-	//make call to lob api if information exists 
+	//check error code 200 or 404
+	//if contains 404 - parse as error message and send back to client 
+	//else parse and pass to lob  
 }); 
 
 
@@ -142,7 +142,6 @@ function getCallToGoogleApi(baseURI){
   		console.log(`Got error: ${e.message}`);
 	});
 
-	//console.log(data);
 	return data;  
 }
 
