@@ -1,0 +1,25 @@
+{
+  "name": "writetoyourelectedofficials",
+  "version": "1.0.0",
+  "description": "A web application that will allow you to generate a letter to your elected official ",
+  "main": "node server.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gj-chen/WriteToYourElectedOfficials.git"
+  },
+  "author": "Gloria Chen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gj-chen/WriteToYourElectedOfficials/issues"
+  },
+  "homepage": "https://github.com/gj-chen/WriteToYourElectedOfficials#readme",
+  "dependencies": {
+    "http": "0.0.0",
+    "nodemon": "^1.10.2",
+    "path": "^0.12.7",
+    "url": "^0.11.0"
+  }
+}

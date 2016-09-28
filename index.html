@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head >
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+    <title>Write To Your Elected Officials</title>
+ 
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+ 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+ 
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+ 
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
+   
+  </head>
+ 
+  <body ng-app="writeToYourElectedOfficials">
+    <div ng-controller = "mainController">
+      <div class="container-fluid">
+        <h1 class = "title text-center">Write To Your Elected Officials</h1>
+        <h3 class = "example text-center">Example:</h3>
+        <div class="container">
+          <p class = "fromAddress text-center">
+          From Address: 
+          <br/> 
+          Name: Gloria Chen
+          <br/> 
+          Address 1: 1540 Valdora Street  
+          <br/>
+          Address 2: Apt. 261
+          <br/>
+          City: Davis 
+          <br/>
+          State: CA
+          <br/> 
+          Zip Code: 95617 
+        </p>
+        </div>
+        
+       
+        <form ng-submit= "writeToYourElectedOfficials()" class='text-center' method="GET" action = "/sendParametersFromClient">
+          <input class = 'text-center' type="text" name="name" placeholder="Name" required ng-model = "name">
+          <input class = 'text-center' type="text" name="address1" placeholder="Address 1" required ng-model= "Address1">
+          <input class = 'text-center' type="text" name="address2" placeholder="Address 2" ng-model="Address2">
+          <input class = 'text-center' type="text" name="city" placeholder="City" required ng-model= "City">
+          <input class = 'text-center' type="text" name="state" placeholder="State" required ng-model= "State">
+          <input class = 'text-center' type="text" name="zipcode" placeholder="Zip Code" required ng-model= "Zipcode">
+          <button type = "submit" class="btn btn-primary">Create Letter</button>
+        </form>  
+ 
+
+      </div>
+    </div>
+
+    <script>
+    
+    </script>
+    
+  </body>
+</html>
