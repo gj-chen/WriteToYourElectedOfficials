@@ -6,12 +6,8 @@ var express = require('express');
 	path = require('path'); 
 	url = require('url');
 	bodyParser = require('body-parser'); 
-	request = require('request'); 
-	EventEmitter = require('events').EventEmitter; 
-	requestify = require('requestify'); 
 
 var app = express(); 
-
 
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -42,10 +38,9 @@ router.get('/sendParametersFromClient', function(req, res, next){
 
 	//function: make http get call to google api 
 	callGoogleApi(name, address1, address2, city, state, zipcode); 
-	//check error code 200 or 404
-	//console.log(data); 
-	//if contains 404 - parse as error message and send back to client 
-	//else parse and pass to lob  
+
+	//function: parse all the http information from google api 
+	//make call to lob api if information exists 
 }); 
 
 
@@ -58,26 +53,12 @@ function callGoogleApi(name, address1, address2, city, state, zipcode){
 
 	//Format:
 	//GET https://www.googleapis.com/civicinfo/v2/representatives?address=317+hart+senate+office+building+washington+dc&key={YOUR_API_KEY}
-	//HERE  
-	var returnData = ""; 
-	https.get(baseURI, (res) => {
-  		var data = "";
-  		console.log(`Got response: ${res.statusCode}`);
-  		// consume response body
-        res.on("data", function(dataJSON) {
-    		//error checking 
-    		JSON.stringify(dataJSON); 
-    		data += dataJSON; 
-    		//console.log(data);   
-  		});
-  		//res.resume();
-	}).on('error', (e) => {
-  		console.log(`Got error: ${e.message}`);
-	}).on('end', function(){
-		returnData = data.toString(); 
-	});
 
-		
+	//make google api call 
+	getCallToGoogleApi(baseURI); 
+
+
+
 }
 
 function parseParameters(name, address1, address2, city, state, zipcode){
@@ -149,6 +130,19 @@ function createGoogleApiGETURI(parameters){
 	return baseURI; 
 }
 
+function getCallToGoogleApi(baseURI){
+	https.get(baseURI, (res) => {
+  		console.log(`Got response: ${res.statusCode}`);
+  		// consume response body
+        res.on("data", function(chunk) {
+    		console.log("BODY: " + chunk);
+  		});
+
+  		res.resume();
+	}).on('error', (e) => {
+  		console.log(`Got error: ${e.message}`);
+	});
+}
 
 //app.get 
 app.get('/', router);

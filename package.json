@@ -17,13 +17,10 @@
   },
   "homepage": "https://github.com/gj-chen/WriteToYourElectedOfficials#readme",
   "dependencies": {
-    "eventemitter": "^0.3.3",
     "http": "0.0.0",
     "https": "^1.0.0",
     "nodemon": "^1.10.2",
     "path": "^0.12.7",
-    "request": "^2.75.0",
-    "requestify": "^0.2.3",
     "url": "^0.11.0"
   }
 }
