@@ -8,7 +8,7 @@ var express = require('express');
 	bodyParser = require('body-parser'); 
 	request = require('request'); 
 	EventEmitter = require('events').EventEmitter; 
-
+	requestify = require('requestify'); 
 
 var app = express(); 
 
@@ -58,9 +58,26 @@ function callGoogleApi(name, address1, address2, city, state, zipcode){
 
 	//Format:
 	//GET https://www.googleapis.com/civicinfo/v2/representatives?address=317+hart+senate+office+building+washington+dc&key={YOUR_API_KEY}
-	//HERE 
-	getCallToGoogleApi(baseURI); 
-	
+	//HERE  
+	var returnData = ""; 
+	https.get(baseURI, (res) => {
+  		var data = "";
+  		console.log(`Got response: ${res.statusCode}`);
+  		// consume response body
+        res.on("data", function(dataJSON) {
+    		//error checking 
+    		JSON.stringify(dataJSON); 
+    		data += dataJSON; 
+    		//console.log(data);   
+  		});
+  		//res.resume();
+	}).on('error', (e) => {
+  		console.log(`Got error: ${e.message}`);
+	}).on('end', function(){
+		returnData = data.toString(); 
+	});
+
+		
 }
 
 function parseParameters(name, address1, address2, city, state, zipcode){
@@ -130,24 +147,6 @@ function createGoogleApiGETURI(parameters){
 	}
 
 	return baseURI; 
-}
-
-
-function getCallToGoogleApi(baseURI){ 
-	var data = ""; 
-	https.get(baseURI, (res) => {
-  		console.log(`Got response: ${res.statusCode}`);
-  		// consume response body
-        res.on("data", function(dataJSON) {
-    		//error checking 
-    		JSON.stringify(dataJSON); 
-    		data += dataJSON; 
-    		//console.log(data);   
-  		});
-  		//res.resume();
-	}).on('error', (e) => {
-  		console.log(`Got error: ${e.message}`);
-	});	
 }
 
 
