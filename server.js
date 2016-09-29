@@ -6,8 +6,12 @@ var express = require('express');
 	path = require('path'); 
 	url = require('url');
 	bodyParser = require('body-parser'); 
+	request = require('request'); 
+	EventEmitter = require('events').EventEmitter; 
+
 
 var app = express(); 
+
 
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -37,9 +41,9 @@ router.get('/sendParametersFromClient', function(req, res, next){
 	var zipcode = req.param('zipcode');
 
 	//function: make http get call to google api 
-	var data = callGoogleApi(name, address1, address2, city, state, zipcode); //currently json format 
+	callGoogleApi(name, address1, address2, city, state, zipcode); 
 	//check error code 200 or 404
-	console.log(data); 
+	//console.log(data); 
 	//if contains 404 - parse as error message and send back to client 
 	//else parse and pass to lob  
 }); 
@@ -54,9 +58,9 @@ function callGoogleApi(name, address1, address2, city, state, zipcode){
 
 	//Format:
 	//GET https://www.googleapis.com/civicinfo/v2/representatives?address=317+hart+senate+office+building+washington+dc&key={YOUR_API_KEY}
+	//HERE 
 	getCallToGoogleApi(baseURI); 
-
-
+	
 }
 
 function parseParameters(name, address1, address2, city, state, zipcode){
@@ -128,24 +132,23 @@ function createGoogleApiGETURI(parameters){
 	return baseURI; 
 }
 
+
 function getCallToGoogleApi(baseURI){ 
-	var data = "";
+	var data = ""; 
 	https.get(baseURI, (res) => {
   		console.log(`Got response: ${res.statusCode}`);
   		// consume response body
         res.on("data", function(dataJSON) {
     		//error checking 
-    		data.concat(dataJSON.toString());   
+    		JSON.stringify(dataJSON); 
+    		data += dataJSON; 
+    		//console.log(data);   
   		});
-  		res.resume();
+  		//res.resume();
 	}).on('error', (e) => {
   		console.log(`Got error: ${e.message}`);
-	});
-	console.log("the data: " + data); 
-	
-	return data;  
+	});	
 }
-
 
 
 //app.get 
