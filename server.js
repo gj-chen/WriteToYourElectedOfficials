@@ -20,7 +20,6 @@ var router = express.Router();
 
 http.createServer(app).listen(process.env.PORT || 8080); 
 
-
 router.use(function(req, res, next){
 	console.log(req.method, req.url); 
 	next(); 
@@ -43,10 +42,22 @@ router.get('/sendParametersFromClient', function(req, res, next){
 	var parameters = parseParameters(name, address1, address2, city, state, zipcode); 
 	var baseURI = createGoogleApiGETURI(parameters)
 	console.log(baseURI); 
-
-	getCallToGoogleApi(baseURI); 
+ 
+	getCallToGoogleApi(baseURI, function(response){
+		//check if response.statusCode == 200 or == 404 
+		if(response.statusCode == 200){
+			//parse and send to Lob Api 
+			parseJSONResponse(response); 
+		}else if(response.statusCode == 404){
+			var noAddressFound = "No information for this address"; 
+			res.send(noAddressFound); 
+		}
+	});
 }); 
 
+function parseJSONResponse(response){
+
+}
 
 function parseParameters(name, address1, address2, city, state, zipcode){
 	var address1Tokens, address2Tokens, cityTokens, stateTokens, zipcodeTokens; 
@@ -117,18 +128,31 @@ function createGoogleApiGETURI(parameters){
 	return baseURI; 
 }
 
-function get(url){
+/*function get(url){
 	return rp(url).then(function(response){
-		return JSON.parse(response); 
+		return response; 
 	}); 
 }
 
 function getCallToGoogleApi(baseURI){
 	get(baseURI).then(function(response){
 		console.log(response); 
+		//parse to check if there is error 
+
+	}); 
+}*/
+
+function getCallToGoogleApi(baseURI, callback){
+	request({
+		url: baseURI
+	}, function(error, response, body){
+		if(!error){
+			callback(response); 
+		}else{
+			console.log('Error was found'); 
+		}
 	}); 
 }
-
 
 //app.get 
 app.get('/', router);
