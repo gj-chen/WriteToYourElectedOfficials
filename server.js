@@ -6,6 +6,10 @@ var express = require('express');
 	path = require('path'); 
 	url = require('url');
 	bodyParser = require('body-parser'); 
+	request = require('request'); 
+	rp = require('request-promise'); 
+	cheerio = require('cheerio'); 
+	XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest; 
 
 var app = express(); 
 
@@ -36,30 +40,13 @@ router.get('/sendParametersFromClient', function(req, res, next){
 	var state = req.param('state'); 
 	var zipcode = req.param('zipcode');
 
-	//function: make http get call to google api 
-	callGoogleApi(name, address1, address2, city, state, zipcode); 
-
-	//function: parse all the http information from google api 
-	//make call to lob api if information exists 
-}); 
-
-
-
-function callGoogleApi(name, address1, address2, city, state, zipcode){
-	//parse parameters
 	var parameters = parseParameters(name, address1, address2, city, state, zipcode); 
 	var baseURI = createGoogleApiGETURI(parameters)
 	console.log(baseURI); 
 
-	//Format:
-	//GET https://www.googleapis.com/civicinfo/v2/representatives?address=317+hart+senate+office+building+washington+dc&key={YOUR_API_KEY}
-
-	//make google api call 
 	getCallToGoogleApi(baseURI); 
+}); 
 
-
-
-}
 
 function parseParameters(name, address1, address2, city, state, zipcode){
 	var address1Tokens, address2Tokens, cityTokens, stateTokens, zipcodeTokens; 
@@ -130,19 +117,18 @@ function createGoogleApiGETURI(parameters){
 	return baseURI; 
 }
 
-function getCallToGoogleApi(baseURI){
-	https.get(baseURI, (res) => {
-  		console.log(`Got response: ${res.statusCode}`);
-  		// consume response body
-        res.on("data", function(chunk) {
-    		console.log("BODY: " + chunk);
-  		});
-
-  		res.resume();
-	}).on('error', (e) => {
-  		console.log(`Got error: ${e.message}`);
-	});
+function get(url){
+	return rp(url).then(function(response){
+		return JSON.parse(response); 
+	}); 
 }
+
+function getCallToGoogleApi(baseURI){
+	get(baseURI).then(function(response){
+		console.log(response); 
+	}); 
+}
+
 
 //app.get 
 app.get('/', router);
